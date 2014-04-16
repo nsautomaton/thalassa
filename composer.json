@@ -5,9 +5,10 @@
 	"keywords": ["wamp", "server", "router", "dealer", "pubsub"],
 	"homepage": "http://github.com/nsautomaton",
 	"licence": "MIT",
-	"author": [{
+	"authors": [{
 				"name": "Brian Kamotho",
 				"email": "lordkamotho@gmail.com",
+				"role": "Developer",
 				"homepage": "http://github.com/nsautomaton"
 			  }],
 	"require": {
