@@ -3,12 +3,11 @@
 	"type": "library",
 	"description": "An implementation of the WAMPV2 protocol in php",
 	"keywords": ["wamp", "server", "router", "dealer", "pubsub"],
-	"homepage": "http://github.com/nsautomaton",
+	"homepage": "http://github.com/nsautomaton/thalassa",
 	"licence": "MIT",
 	"authors": [{
 				"name": "Brian Kamotho",
 				"email": "lordkamotho@gmail.com",
-				"role": "Developer",
 				"homepage": "http://github.com/nsautomaton"
 			  }],
 	"require": {
