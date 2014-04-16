@@ -1,1 +1,1 @@
-pre-alpha release.incomplete and buggy.
+pre-alpha release.incomplete.a work in progress.
