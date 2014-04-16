@@ -1,5 +1,6 @@
 <?php
 namespace Thalassa\wsProtocols\RFC6455;
+use Thalassa\UI\console;
   /*
   RFC6455:
   

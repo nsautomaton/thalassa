@@ -1,5 +1,6 @@
 <?php
 namespace Thalassa\Router;
+use Thalassa\wampProtocol\wampProtocol;
 interface channelsInterface{
     function __construct(wampProtocol $protocol);
 	

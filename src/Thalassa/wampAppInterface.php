@@ -1,5 +1,7 @@
 <?php
 namespace Thalassa;
+use Thalassa\Router\channelsInterface;
+use Thalassa\Dealer\proceduresInterface;
 interface wampAppInterface{
     function __construct();
 	

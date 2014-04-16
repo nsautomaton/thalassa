@@ -1,6 +1,8 @@
 <?php
 namespace Thalassa;
-use Components\EventDispatcher\Event;
+use Thalassa\EventDispatcher\Event;
+use Thalassa\wampProtocol\wampProtocol;
+use Thalassa\wampAppInterface;
   /*Routes events between different classes
   */
 class dispatch{
