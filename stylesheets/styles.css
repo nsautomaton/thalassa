@@ -108,7 +108,7 @@ color: #00FFFF;
 footer
 {
 background-color: #db2e34;
-position:absolute;
+position:relative;
 bottom: 0px;
 left:0px;
 width:100%;
