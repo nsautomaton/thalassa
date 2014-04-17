@@ -39,6 +39,10 @@
       $(this).html($(this).html().replace(/\(/g, '<brackets>(</brackets>'));
       $(this).html($(this).html().replace(/\)/g, '<brackets>)</brackets>'));
       $(this).html($(this).html().replace(/tag/g, '<tag>'+'&#60;?php'+'</tag>'));
+      $(this).html($(this).html().replace(/sml/g, '<htmltag>'+'&#60;'+'</htmltag>'));
+      $(this).html($(this).html().replace(/_ml/g, '<htmltag>'+'&#62;'+'</htmltag>'));
+      $(this).html($(this).html().replace(/eml/g, '<htmltag>'+'&#60;/'+'</htmltag>'));
+      $(this).html($(this).html().replace(/zml/g, '<htmltag>'+'/&#62;'+'</htmltag>'));
     });
   });
   </script>
@@ -144,6 +148,54 @@ $server->start();
 	  <p>Create a folder "bin" and save the code simply as daemon.php</p>
 	  <p>That's all.To start the server simply cd your way to to /bin and type the command:</p>
 	  <code>php daemon.php</code>
+          <h4>But wait!What about the client-side code?</h4>
+	  <p>Thalassa could work with any WAMP V2 client.See a <a href="http://wamp.ws/implementations/">list of clients and other routers</a>
+	  For this tutorial <a href="http://autobahn.ws/js/">Autobahn|JS</a> is used.</br>
+	  Learn more and view <a href="http://autobahn.ws/js/reference.html">the full documentation</a>.
+	  <p>
+	  <div class="code">
+<pre>
+smlhtml_ml
+smlhead_ml
+smlmeta charset='utf-8'_ml
+smlscript type="text/javascript" src="path_to_your_autobahn|js_copy"_mlemlscript_ml
+smlscript type="text/javascript"_ml
+function onevent(message)
+{
+console.log(message);
+};
+function send()
+{
+sess.publish("com.test.app", "Hello World");
+};
+window.onload = function(){
+var connection = new autobahn.Connection({url : 'ws://127.0.0.1:9000'});
+	connection.onopen = function(session){
+		       window.sess = session;
+		       session.subscribe("com.test.app", onevent).then(
+		               function(subscription)
+					   {
+					   console.log("subscription successful");			  
+					   },
+					   function(error)
+					   {
+					   console.log("subscription error");				  
+					   });
+		        console.log('Connection established');
+    };
+	connection.onclose = function(session){
+		       console.log('Connection lost');
+    };
+	connection.open();
+};
+emlscript_ml
+emlhead_ml
+smlbody_ml
+smlinput type='button' value="send the message!" onclick='send();'zml
+emlbody_ml
+emlhtml_ml
+</pre>
+	  </div>
   </section>
 </body>
 </html>
