@@ -115,6 +115,16 @@ class wampApp implements wampAppInterface{
 	  provided the class name matches the file name.This is because we're using psr-0 autoloading.</br>
 	  Similarly, the folder "wampComponent" could be any name you like, as long as it matches the</br>
 	  namespace of the code that resides in it.</p>
+      <p>In your composer.json:</p>
+	  <div class="code">
+<pre>
+"autoload": {
+    "psr-0": {
+	    "wampComponent": "src"
+    }
+}
+</pre>
+	  </div>
 	  <p>...and now the shell script:</p>
 	  <div class="code">
 	  <pre>
