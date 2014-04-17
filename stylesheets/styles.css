@@ -1,0 +1,103 @@
+body
+{
+background-color: #dbe9e6;
+color: #666;
+font-family: Trebuchet MS;
+font-weight: 100;
+line-height: 1.5;
+margin: 0;
+padding: 0;
+border: 0;
+vertical-align: baseline;
+font-size:15px;
+overflow-x: none;
+}
+h3
+{
+font-family: comic sans ms;
+color: #000;
+}
+p > a:link
+{
+color: blue;
+text-decoration: none;
+}
+p > a:hover
+{
+color: orange;
+}
+p > a:active
+{
+color: green;
+}
+p > a:visited
+{
+color: #000;
+}
+code
+{
+background-color: 2c2c2c;
+color: #FFF ;
+}
+.code
+{
+background-color: 2c2c2c;
+color: #FFF ;
+}
+.jumpto
+{
+position: absolute;
+left: 15%;
+right: 10%;
+top: 200px;
+}
+.main
+{
+position: absolute;
+left: 15%;
+right: 10%;
+top: 400px;
+}
+.top
+{
+position: absolute;
+top: 0px;
+left: 0px;
+height: 20px;
+width:auto;
+}
+.cataclysm
+{
+background-color: #2c2c2c;
+color: #dbe9e6;
+text-align: center;
+border-radius: 8px;
+}
+.left
+{
+
+}
+curly
+{
+color: yellow;
+}
+semi,brackets
+{
+color: lightgreen;
+}
+colon
+{
+color: green;
+}
+quoted
+{
+color: grey;
+}
+quote
+{
+color: green;
+}
+tag
+{
+color: red;
+}
