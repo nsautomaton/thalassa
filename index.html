@@ -97,14 +97,11 @@ class wampApp implements wampAppInterface{
     $channelAccess->broadcast($channelAccess, $conn, $data, $options);
     }
 
-    public function onRegister(proceduresInterface $exe, $conn, $call, $requestID, array $options)
-    {}
+    public function onRegister(proceduresInterface $exe, $conn, $call, $requestID, array $options){}
 	
-    public function onUnregister(proceduresInterface $exe, $conn, $regID, $requestID)
-    {}
+    public function onUnregister(proceduresInterface $exe, $conn, $regID, $requestID){}
 	
-    public function onCall(proceduresInterface $exe, $conn, $call, array $args, array $options)
-    {}
+    public function onCall(proceduresInterface $exe, $conn, $call, array $args, array $options){}
 	
     public function onError($conn, $details){}
 	
