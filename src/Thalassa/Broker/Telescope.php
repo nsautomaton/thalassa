@@ -1,5 +1,5 @@
 <?php
-namespace Thalassa\Router;
+namespace Thalassa\Broker;
 use Thalassa\wampProtocol\wampProtocol;
 class Telescope{
     public function __construct(wampProtocol $protocol)

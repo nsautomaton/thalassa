@@ -1,6 +1,6 @@
 <?php
 namespace Thalassa;
-use Thalassa\Router\channelsInterface;
+use Thalassa\Broker\channelsInterface;
 use Thalassa\Dealer\proceduresInterface;
 interface wampAppInterface{
     function onOpen($conn, $sessionKey);

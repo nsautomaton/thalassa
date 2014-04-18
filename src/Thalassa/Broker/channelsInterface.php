@@ -1,5 +1,5 @@
 <?php
-namespace Thalassa\Router;
+namespace Thalassa\Broker;
 use Thalassa\wampProtocol\wampProtocol;
 interface channelsInterface{
     function __construct(wampProtocol $protocol);

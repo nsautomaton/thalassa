@@ -1,5 +1,5 @@
 <?php
-namespace Thalassa\Router;
+namespace Thalassa\Broker;
 use Thalassa\wampProtocol\wampProtocol;
 class Channels extends Telescope implements channelsInterface{
     private $spectrum;

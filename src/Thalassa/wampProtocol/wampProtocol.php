@@ -2,7 +2,7 @@
 namespace Thalassa\wampProtocol;
 use Thalassa\Rand\Chaos;
 use Thalassa\wsProtocols\RFC6455\wsData;
-use Thalassa\Router\Channels;
+use Thalassa\Broker\Channels;
 use Thalassa\Dealer\Procedures;
 use Thalassa\EventDispatcher\Event;
 class wampProtocol extends wsData{
