@@ -71,6 +71,7 @@
   <h3><a name="installing">Installing</a></h3>
       <p>Composer:</p>
 	  <pre><code>"require": {"nsautomaton/thalassa": "dev-master"}</code></pre>
+	  <p>new to composer?See <a href="https://getcomposer.org/download/">installation</a> and <a href="https://getcomposer.org/doc/01-basic-usage.md">Usage</a></p>
   <h3><a name="hello_world">Hello world!</a></h3>
       <div class="code">
 	  <pre>
@@ -128,6 +129,10 @@ class wampApp implements wampAppInterface{
 }
 </pre>
 	  </div>
+	  <p>Update composer by re-running install to regenerate vendor/autoload.php:</p>
+	  <code>composer install</code>
+	  or
+	  <code>composer update</code></br>
 	  <p>...and now the shell script:</p>
 	  <div class="code">
 	  <pre>
