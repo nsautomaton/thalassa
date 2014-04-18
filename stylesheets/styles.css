@@ -1,3 +1,7 @@
+html
+{
+min-height:100%; 
+}
 body
 {
 background-color: #dbe9e6;
@@ -108,8 +112,8 @@ color: #00FFFF;
 footer
 {
 background-color: #db2e34;
-position:relative;
-top: 100%;
+position:absolute;
+bottom: 0;
 left:0;
 width:100%;
 }
