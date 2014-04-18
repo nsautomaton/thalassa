@@ -65,7 +65,7 @@
       web-socket protocol,</br> Thalassa will only work for clients implementing WAMP as a websocket sub-protocol, and hence is
 	  better defined as a WAMP</br> server, as opposed to a WAMP-capable websocket server.</p>
   <h3><a name="features">Features</a></h3>
-      <p>Thalassa features an event-driven IO using libevent, and implements the role of a router and a dealer.</p>
+      <p>Thalassa features an event-driven IO using libevent, and implements the role of a broker and a dealer.</p>
   <h3><a name="requirements">Requirements</a></h4>
       <p>A working installation of the <a href="http://libevent.org/">libevent library</a> and <a href="http://pecl.php.net/package/libevent">necessary extensions.</a></p>
   <h3><a name="installing">Installing</a></h3>
@@ -79,7 +79,7 @@ tag
 namespace wampComponent;
 use Thalassa\wampAppInterface;
 use Thalassa\Dealer\proceduresInterface;
-use Thalassa\Router\channelsInterface;
+use Thalassa\Broker\channelsInterface;
 class wampApp implements wampAppInterface{
     public function onOpen($conn, $sessionKey){}
 	
