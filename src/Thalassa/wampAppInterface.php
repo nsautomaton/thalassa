@@ -3,8 +3,6 @@ namespace Thalassa;
 use Thalassa\Router\channelsInterface;
 use Thalassa\Dealer\proceduresInterface;
 interface wampAppInterface{
-    function __construct();
-	
     function onOpen($conn, $sessionKey);
 	
     function onSubscribe(channelsInterface $channelAccess, $conn, $requestID, $channel);
@@ -18,8 +16,6 @@ interface wampAppInterface{
 	function onUnregister(proceduresInterface $exe, $conn, $regID, $requestID);
 	
 	function onCall(proceduresInterface $exe, $conn, $call, array $args, array $options);
-	
-	function onFlag($conn, $reason);
 	
 	function onError($conn, $details);
 	

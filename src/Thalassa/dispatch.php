@@ -24,7 +24,7 @@ class dispatch{
 	 $this->event->on('Register', array($app, 'Onregister', 5));
 	 $this->event->on('Unregister', array($app, 'OnUnregister', 4));
 	 $this->event->on('Call', array($app, 'OnCall', 5));
-	 $this->event->on('Flag', array($app, 'OnFlag', 3));
+	 //$this->event->on('Flag', array($app, 'OnFlag', 3));
 	 $this->event->on('Error', array($app, 'onError', 2));
 	 $this->event->on('Close', array($app, 'onClose', 1));	 
 	 }
