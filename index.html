@@ -177,13 +177,13 @@ var connection = new autobahn.Connection({url : 'ws://127.0.0.1:9000'});
 		       window.sess = session;
 		       session.subscribe("com.test.app", onevent).then(
 		               function(subscription)
-					   {
-					   console.log("subscription successful");			  
-					   },
-					   function(error)
-					   {
-					   console.log("subscription error");				  
-					   });
+			       {
+			       console.log("subscription successful");			  
+			       },
+			       function(error)
+			       {
+			       console.log("subscription error");				  
+			       });
 		        console.log('Connection established');
     };
 	connection.onclose = function(session){
