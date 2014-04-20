@@ -113,6 +113,11 @@ class Channels extends Telescope implements channelsInterface{
 	return $subscribers =& $this->spectrum[$channel];
 	}
 	
+	public function exists($channel)
+	{
+	return isset($this->spectrum[$channel]) ? true : false;
+	}
+	
 	public function who_is_creator($channel)
 	{
 	$creator =& $this->creator[$channel];

@@ -25,7 +25,7 @@ final class Server{
 	protected $i;
 	private $fds;
 	
-    public function __construct($host = '127.0.0.1', $port = 9000)
+    public function __construct($host = '127.0.0.1', $port = 80)
 	{
 	ini_set('precision', 50);
 	$this->host = $host;
@@ -38,7 +38,12 @@ final class Server{
 	$this->i = 0;
 	$this->buffer_id = 0;
 	$this->event = new Event;
-	$this->ev_base = event_base_new();
+	  if(function_exists('event_base_new'))
+	  {
+	  $this->ev_base = event_base_new();
+	  }else{
+	    trigger_error("Libevent does not seem to be installed properly on your system/php.See README for more info\n", E_USER_ERROR);
+		}
 	$this->fds = [];
 	}
 	

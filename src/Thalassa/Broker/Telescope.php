@@ -8,6 +8,15 @@ class Telescope{
 	}
     public function broadcast(channelsInterface $chann, $me, array $data, array $options)
 	{
+	  if(!$chann->exists($data['channel']))
+	  {
+	    if($options['acknowledge'] === true)
+	    {
+	    $feedback = $this->protocol->publishErrorProtocol($data['requestID']);
+	    fwrite($me, $feedback, strlen($feedback));
+	    }
+	  return null;
+	  }
 	  if($options['eligibles'])
 	  {
 	  $subscribers =& $this->protocol->get_connections($options['eligibles']);
@@ -27,19 +36,23 @@ class Telescope{
 		{
 		  if(array_search($conn, $exclude_list) !== false)
 		  {
-		  echo "excluded!!!!!!";
 		  continue;
 		  }
 		}
         if($options['exclude_me'] === true && $conn == $me)
 		{
-		echo "excluded!!!!!!";
 		continue;
 		}
 	  $id = $chann->get_subscription_id($conn, $data['channel']);
-	  $raw_data = $this->protocol->eventProtocol(array($id, $data['requestID'], $kwargs, $data['payload']));
+	  $raw_data = $this->protocol->eventProtocol(array($id, $data['pubID'], $kwargs, $data['payload']['Arguments'], $data['payload']['ArgumentsKw']));
 	  fwrite($conn, $raw_data, strlen($raw_data));
       }
+	  //breath ;)
+	  if($options['acknowledge'] === true)
+	  {
+	  $feedback = $this->protocol->publishedProtocol($data['requestID'], $data['pubID']);
+	  fwrite($me, $feedback, strlen($feedback));
+	  }
 	}
 	
 	public function send($conn, $data)

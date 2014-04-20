@@ -19,4 +19,6 @@ interface channelsInterface{
 	function count_subscribers($channel);
 	
 	function get_subscribers($channel);
+	
+	function exists($channel);
 }

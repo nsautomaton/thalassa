@@ -81,26 +81,43 @@ class Procedures implements proceduresInterface{
 	fwrite($callee, $query, strlen($query));
 	}
 	
-	public function handle_call_results($conn, $invocutionID, array $args)
+	public function handle_call_results($conn, $invocutionID, array $args, $flag = null)
 	{
 	  if(!isset($this->pending[$invocutionID]) || $this->pending[$invocutionID]['callee'] !== $conn)
 	  {
 	  /*CALL ONFLAG*/
-	  }else{
-	    $msg = $this->protocol->resultProtocol($this->pending[$invocutionID]['requestID'], $args['Arguments'], $args['ArgumentsKw']);
-		fwrite($this->pending[$invocutionID]['caller'], $msg, strlen($msg));
-		unset($this->pending[$invocutionID]);
-		}
+	  }else if($flag === 'invocation_error')
+	    {
+		$this->send_call_error($conn, $this->pending[$invocutionID]['requestID'], $args);
+		}else{
+	      $msg = $this->protocol->resultProtocol($this->pending[$invocutionID]['requestID'], $args['Arguments'], $args['ArgumentsKw']);
+		  fwrite($this->pending[$invocutionID]['caller'], $msg, strlen($msg));
+		  unset($this->pending[$invocutionID]);
+		  }
+	}
+	
+	public function interrupt($conn, $requestID)
+	{
+	$hold = array_search($requestID, $this->pending);
+	  if($hold && $this->pending[$hold]['caller'] === $conn)
+	  {
+	  $msg = $this->protocol->interruptProtocol($this->pending[$hold]['requestID']);
+	  fwrite($conn, $msg, strlen($msg));
+	  unset($this->pending[$hold]);
+	  }
 	}
 	
 	public function clear_ghost_data($conn)
 	{
 	$call =& $this->associated[(int)$conn];
-	$hold = array_search($conn, $this->pending);
-	  if($hold && $this->pending[$hold]['call'] === $call)
+	  while(array_search($conn, $this->pending))
 	  {
-	  $this->send_call_error($conn, $this->pending[$hold]['requestID'], 'wamp.error.connection_to_remote_procedure_endpoint_lost');
-	  unset($this->pending[$hold]);
+	  $hold = array_search($conn, $this->pending);
+	    if($hold && $this->pending[$hold]['call'] === $call)
+	    {
+	    $this->send_call_error($conn, $this->pending[$hold]['requestID'], 'wamp.error.connection_to_remote_procedure_endpoint_lost');
+	    unset($this->pending[$hold]);
+	    }
 	  }
 	unset($this->calls[$call]);
 	unset($call);

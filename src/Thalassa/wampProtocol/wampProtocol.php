@@ -62,16 +62,14 @@ class wampProtocol extends wsData{
 		    case self::ABORT:
 		      $this->abortProtocol($conn, $msg);
 		      break;
-		    case self::CHALLENGE:
-		      $this->challengeProtocol($conn, $msg);
-		      break;
 		    case self::AUTHENTICATE:
+			  //todo
 		      break;
+			case self::HEARTBEAT:
+			  //todo
+			  break;
 		    case self::GOODBYE:
 		      $this->goodbyeProtocol($conn, $msg);
-		      break;
-		    case self::ERROR:
-		      $this->errorProtocol($conn, $msg);
 		      break;
 		    case self::PUBLISH:
 		      $this->publishProtocol($conn, $msg);
@@ -97,6 +95,11 @@ class wampProtocol extends wsData{
 		    case self::YIELD:
 		      $this->yieldProtocol($conn, $msg);
 		      break;
+			case self::ERROR:
+			  if($msg[1] === self::INVOCATION)
+			  {
+			  $this->invocationErrorProtocol($conn, $msg);
+			  }
 		    default:
 			//todo
 			//var_dump($this->wsDecode($data));
@@ -172,8 +175,7 @@ class wampProtocol extends wsData{
 	
 	public function abortProtocol($conn, $msg)
 	{
-	//
-	//$event->call('onAbort', array($conn, $msg));
+	$this->flag($conn);
 	}
 	
 	public function subscribeProtocol($conn, $msg)
@@ -219,21 +221,46 @@ class wampProtocol extends wsData{
 	$dict = (array)$msg[2];
 	  if($dict)
 	  {
-	  isset($dict['exclude']) ? $exclude = $dict['exclude'] : $exclude = array();
-	  isset($dict['eligible']) ? $eligibles = $dict['exclude'] : $eligibles = array();
+	    if(isset($dict['acknowledge']))
+		{
+		$dict['acknowledge']===true ? $acknowledge = true : $acknowledge = false;
+		}else{
+		  $acknowledge = false;
+		  }
+	  isset($dict['exclude']) ? $exclude = $dict['exclude'] : $exclude = false;
+	  isset($dict['eligible']) ? $eligibles = $dict['exclude'] : $eligibles = false;
 	  (isset($dict['exclude_me']) && $dict['exclude_me'] === true) ? $notme = true : $notme = false;
 	  (isset($dict['disclose_me']) && $dict['disclose_me'] === true) ? $identify = true : $identify = false;
 	  }else{
-	    $exclude = array();
-	    $eligibles = array();
+	    $acknowledge = false;
+	    $exclude = false;
+	    $eligibles = false;
 	    $notme = false;
 	    $identify = false;
 		}
-	$this->event->call('Publish', array($this->spectrometer, $conn, array("requestID"=>$msg[1], "channel"=>$msg[3], "payload"=>$msg[4]),
-                                  array("exclude"=>$exclude,
+	isset($msg[4]) ? $Arguments = $msg[4] : $Arguments = null;
+	isset($msg[5]) ? $ArgumentsKw = $msg[5] : $ArgumentsKw = null;
+	$this->event->call('Publish', array($this->spectrometer, $conn,
+                                  array("requestID"=>$msg[1],
+                                        "channel"=>$msg[3],
+										"pubID"=>Chaos::keyGen(10),
+                                        "payload"=>["Arguments"=>$Arguments, "ArgumentsKw"=>$ArgumentsKw]),
+                                  array("acknowledge"=>$acknowledge,
+								        "exclude"=>$exclude,
      								    "eligibles"=>$eligibles,
 										"exclude_me"=>$notme,
 										"disclose_me"=>$identify)));
+	}
+	
+	public function publishedProtocol($requestID, $pubID)
+	{
+	return $this->encode([self::PUBLISHED, $requestID, $pubID]);
+	}
+	
+	public function publishErrorProtocol($requestID, $reason = null)
+	{
+	$reason === null ? $reason = 'wamp.error.invalid_topic' : $reason;
+	return $this->encode([self::ERROR, self::PUBLISH, $requestID, (object)[], $reason]);
 	}
 	
 	public function eventProtocol(array $msg)
@@ -243,10 +270,11 @@ class wampProtocol extends wsData{
 	return $data;
 	}
 	
-	public function goodbyeProtocol()
+	public function goodbyeProtocol($conn, $msg)
 	{
-	//
-	//$event->call('onClose', array($conn, $msg));
+	$reply = [self::GOODBYE, (object)[], 'wamp.error.goodbye_and_out'];
+	fwrite($conn, $reply, strlen($reply));
+	$this->flag($conn);
 	}
 	
 	public function registerProtocol($conn, $msg)
@@ -298,14 +326,22 @@ class wampProtocol extends wsData{
 	
 	public function callErrorProtocol($requestID, $errormsg)
 	{
+	  if(is_array($errormsg))/*means it's an invocation error*/
+	  {
+	  return $this->encode([self::ERROR, self::CALL, $requestID, $errormsg['Details'], $errormsg['Error'], $errormsg['Arguments'], $errormsg['ArgumentsKw']]);
+	  }
 	$errormsg === null ? $errormsg = 'wamp.error.no_such_procedure' : $errormsg;
-	return $this->encode([self::ERROR, self::CALL, $requestID, (object)[], $errormsg]);
+	return $this->encode([self::ERROR, self::CALL, $requestID, null, $errormsg]);
 	}
 	
-	public function cancelProtocol($data)
+	public function cancelProtocol($conn, $msg)
 	{
-	//
-	//$event->call('onCancel', array($conn, $msg));
+	$this->rpc->interrupt($conn, $msg[1]);
+	}
+	
+	public function interruptProtocol($invocationID)
+	{
+	return $this->encode([self::INTERRUPT, $invocationID, null]);
 	}
 	
 	public function invokeProtocol($invocutionID, $registrationID, $Arguments, $ArgumentsKw)
@@ -318,6 +354,15 @@ class wampProtocol extends wsData{
 	isset($msg[3]) ? $Arguments = $msg[3] : $Arguments = null;
 	isset($msg[4]) ? $ArgumentsKw = $msg[4] : $ArgumentsKw = null;
 	$this->rpc->handle_call_results($conn, $msg[1], ['Options'=>$msg[2], 'Arguments'=>$Arguments, 'ArgumentsKw'=>$ArgumentsKw]);
+	}
+	
+	public function invocationErrorProtocol($conn, $msg)
+	{
+	isset($msg[3]) ? $details = $msg[3] : $details = null;
+	isset($msg[4]) ? $error = $msg[4] : $error = null;
+	isset($msg[5]) ? $arguments = $msg[5] : $arguments = null;
+	isset($msg[6]) ? $argumentskw = $msg[6] : $argumentskw = null;
+	$this->rpc->handle_call_results($conn, $msg[2], ['Details'=>$details, 'Error'=>$error, 'Arguments'=>$arguments, 'ArgumentsKw'=>$argumentskw], /*$flag=*/'invocation_error');
 	}
 	
 	public function resultProtocol($requestID, $Arguments, $ArgumentsKw)
@@ -352,11 +397,6 @@ class wampProtocol extends wsData{
 	return $msg;
 	}
 
-    public function invalid_message($conn, $msg)
-	{
-	
-	}
-	
 	public function flag($conn)
 	{
 	$close_frame = $this->close();
