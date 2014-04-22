@@ -169,7 +169,7 @@ console.log(message);
 };
 function send()
 {
-sess.publish("com.test.app", "Hello World");
+sess.publish("com.test.app", "Hello World", {exclude_me:false});
 };
 window.onload = function(){
 var connection = new autobahn.Connection({url : 'ws://127.0.0.1:9000'});
